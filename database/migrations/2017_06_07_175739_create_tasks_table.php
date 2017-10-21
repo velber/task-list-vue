@@ -17,7 +17,6 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->string('name', 128);
             $table->integer('status_id')->unsigned();
-            $table->foreign('status_id')->references('id')->on('statuses');
             $table->double('order', 15, 8);
             $table->timestamps();
         });

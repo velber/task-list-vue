@@ -12,8 +12,6 @@ class StatusesTableSeeder extends Seeder
      */
     public function run()
     {
-        App\Status::truncate();
-
         DB::table('statuses')->insert([
             [
                 'name' => 'Status 1',
