@@ -41,7 +41,7 @@
     <!-- Material Lite -->
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <!-- custom scripts -->
-    <script src="{{ asset('/js/script.js') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/app.js') }}" type="text/javascript"></script>
 
     <script>
         window.Laravel = <?php echo json_encode([

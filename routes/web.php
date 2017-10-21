@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'TaskController@index');
+Route::get('/tasks', 'TaskController@tasks');
 Route::post('/task', 'TaskController@store');
 Route::patch('/task/{task}', 'TaskController@update')->where('task', '[\d+]+');
 Route::delete('/task/{task}', 'TaskController@destroy')->where('task', '[\d+]+');

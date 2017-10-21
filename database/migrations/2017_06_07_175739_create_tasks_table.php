@@ -20,6 +20,10 @@ class CreateTasksTable extends Migration
             $table->double('order', 15, 8);
             $table->timestamps();
         });
+
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->foreign('status_id')->references('id')->on('statuses');
+        });
     }
 
     /**

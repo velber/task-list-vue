@@ -15,13 +15,14 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::with('status')
+        return view('index');
+    }
+
+    public function tasks()
+    {
+        return Task::with('status')
             ->orderBy('order', 'desc')
             ->get();
-
-        $statuses = Status::all();
-
-        return view('index', compact('tasks', 'statuses'));
     }
 
     /**
