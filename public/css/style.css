@@ -1,0 +1,51 @@
+.mdl-spinner.is-upgraded,
+.mdl-spinner.is-upgraded.is-active {
+    position: fixed;
+    top: 46%;
+    left: 50%;
+    z-index: 2;
+    visibility: visible;
+}
+.spinner-wrap {
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: #000;
+}
+.form-group__task {
+    display: flex;
+    justify-content: center;
+}
+.form-group__task .mdl-textfield {
+    width: 100%;
+    margin-right: 20px;
+}
+.form-group__task .form-control {
+    width: 180px;
+    margin: 20px;
+}
+.form-group__task .mdl-button {
+    margin: 20px 0;
+}
+.mdl-data-table {
+    margin: 0 auto;
+}
+.mdl-data-table .editable {
+    background-color: #ffffd0;
+}
+.mdl-data-table .task-edit {
+    min-width: 600px;
+}
+.mdl-data-table .save-task .mdl-button {
+    display: none;
+    float: right;
+    cursor: pointer;
+}
+.mdl-data-table  .material-icons__move {
+    cursor: pointer;
+    color: rgb(63, 81, 181);
+}
