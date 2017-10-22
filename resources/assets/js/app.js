@@ -14,13 +14,25 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+import Vddl from 'vddl';
 
+Vue.use(Vddl);
 Vue.component('task', require('./components/Task.vue'));
 
 const app = new Vue({
     el: '#app',
     data: {
-        tasks: []
+        tasks: [],
+        "list": [
+            {
+                "id": 1,
+                "label": "Item A1"
+            },
+            {
+                "id": 2,
+                "label": "Item A2"
+            }
+        ]
     },
     created() {
         axios.get('/tasks').then(response => this.tasks = response.data);

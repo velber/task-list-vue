@@ -1,10 +1,5 @@
 <template>
     <li class="mdl-list__item">
-            <span>
-                <button class="mdl-button mdl-js-button mdl-button--icon">
-                    <i class="material-icons">blur_on</i>
-                </button>
-            </span>
         <span class="mdl-list__item-check">
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" :for="getCheckboxId(task.id)"
                        style="width: 30px;">
@@ -25,6 +20,7 @@
 <script>
     export default {
         props: ['task'],
+        components: [''],
         methods: {
             getCheckboxId(id) {
                 return `list-checkbox-${id}`;

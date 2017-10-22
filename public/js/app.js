@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,8 +70,8 @@
 "use strict";
 
 
-var bind = __webpack_require__(3);
-var isBuffer = __webpack_require__(18);
+var bind = __webpack_require__(6);
+var isBuffer = __webpack_require__(26);
 
 /*global toString:true*/
 
@@ -402,13 +402,41 @@ module.exports = g;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports) {
+
+module.exports = function(module) {
+	if(!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if(!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(0);
-var normalizeHeaderName = __webpack_require__(20);
+var normalizeHeaderName = __webpack_require__(28);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -424,10 +452,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(8);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(5);
+    adapter = __webpack_require__(8);
   }
   return adapter;
 }
@@ -498,10 +526,79 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 3 */
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(12),
+    getRawTag = __webpack_require__(59),
+    objectToString = __webpack_require__(60);
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+module.exports = baseGetTag;
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+module.exports = isObjectLike;
+
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -519,7 +616,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -709,19 +806,19 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var settle = __webpack_require__(21);
-var buildURL = __webpack_require__(23);
-var parseHeaders = __webpack_require__(24);
-var isURLSameOrigin = __webpack_require__(25);
-var createError = __webpack_require__(6);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(26);
+var settle = __webpack_require__(29);
+var buildURL = __webpack_require__(31);
+var parseHeaders = __webpack_require__(32);
+var isURLSameOrigin = __webpack_require__(33);
+var createError = __webpack_require__(9);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(34);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -818,7 +915,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(27);
+      var cookies = __webpack_require__(35);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -896,13 +993,13 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var enhanceError = __webpack_require__(22);
+var enhanceError = __webpack_require__(30);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -921,7 +1018,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -933,7 +1030,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -959,17 +1056,171 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(10);
-module.exports = __webpack_require__(47);
+var root = __webpack_require__(13);
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+module.exports = Symbol;
 
 
 /***/ }),
-/* 10 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var freeGlobal = __webpack_require__(14);
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+module.exports = root;
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global == 'object' && global && global.Object === Object && global;
+
+module.exports = freeGlobal;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+module.exports = isArray;
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports) {
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+ * @example
+ *
+ * _.isLength(3);
+ * // => true
+ *
+ * _.isLength(Number.MIN_VALUE);
+ * // => false
+ *
+ * _.isLength(Infinity);
+ * // => false
+ *
+ * _.isLength('3');
+ * // => false
+ */
+function isLength(value) {
+  return typeof value == 'number' &&
+    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+module.exports = isLength;
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isFunction = __webpack_require__(72),
+    isLength = __webpack_require__(16);
+
+/**
+ * Checks if `value` is array-like. A value is considered array-like if it's
+ * not a function and has a `value.length` that's an integer greater than or
+ * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ * @example
+ *
+ * _.isArrayLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLike(document.body.children);
+ * // => true
+ *
+ * _.isArrayLike('abc');
+ * // => true
+ *
+ * _.isArrayLike(_.noop);
+ * // => false
+ */
+function isArrayLike(value) {
+  return value != null && isLength(value.length) && !isFunction(value);
+}
+
+module.exports = isArrayLike;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(19);
+module.exports = __webpack_require__(86);
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vddl__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vddl___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vddl__);
 
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -977,9 +1228,9 @@ module.exports = __webpack_require__(47);
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(11);
+__webpack_require__(20);
 
-window.Vue = __webpack_require__(35);
+window.Vue = __webpack_require__(43);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -987,12 +1238,21 @@ window.Vue = __webpack_require__(35);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('task', __webpack_require__(38));
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_0_vddl___default.a);
+Vue.component('task', __webpack_require__(77));
 
 var app = new Vue({
     el: '#app',
     data: {
-        tasks: []
+        tasks: [],
+        "list": [{
+            "id": 1,
+            "label": "Item A1"
+        }, {
+            "id": 2,
+            "label": "Item A2"
+        }]
     },
     created: function created() {
         var _this = this;
@@ -1004,11 +1264,11 @@ var app = new Vue({
 });
 
 /***/ }),
-/* 11 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(12);
+window._ = __webpack_require__(21);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -1017,9 +1277,9 @@ window._ = __webpack_require__(12);
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(14);
+  window.$ = window.jQuery = __webpack_require__(22);
 
-  __webpack_require__(15);
+  __webpack_require__(23);
 } catch (e) {}
 
 /**
@@ -1028,7 +1288,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(16);
+window.axios = __webpack_require__(24);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -1062,7 +1322,7 @@ if (token) {
 // });
 
 /***/ }),
-/* 12 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -18151,38 +18411,10 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(13)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(2)(module)))
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-module.exports = function(module) {
-	if(!module.webpackPolyfill) {
-		module.deprecate = function() {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if(!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-
-/***/ }),
-/* 14 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -28442,7 +28674,7 @@ return jQuery;
 
 
 /***/ }),
-/* 15 */
+/* 23 */
 /***/ (function(module, exports) {
 
 /*!
@@ -30825,22 +31057,22 @@ if (typeof jQuery === 'undefined') {
 
 
 /***/ }),
-/* 16 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(17);
+module.exports = __webpack_require__(25);
 
 /***/ }),
-/* 17 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(3);
-var Axios = __webpack_require__(19);
-var defaults = __webpack_require__(2);
+var bind = __webpack_require__(6);
+var Axios = __webpack_require__(27);
+var defaults = __webpack_require__(3);
 
 /**
  * Create an instance of Axios
@@ -30873,15 +31105,15 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(8);
-axios.CancelToken = __webpack_require__(33);
-axios.isCancel = __webpack_require__(7);
+axios.Cancel = __webpack_require__(11);
+axios.CancelToken = __webpack_require__(41);
+axios.isCancel = __webpack_require__(10);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(34);
+axios.spread = __webpack_require__(42);
 
 module.exports = axios;
 
@@ -30890,7 +31122,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 18 */
+/* 26 */
 /***/ (function(module, exports) {
 
 /*!
@@ -30917,18 +31149,18 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 19 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 var utils = __webpack_require__(0);
-var InterceptorManager = __webpack_require__(28);
-var dispatchRequest = __webpack_require__(29);
-var isAbsoluteURL = __webpack_require__(31);
-var combineURLs = __webpack_require__(32);
+var InterceptorManager = __webpack_require__(36);
+var dispatchRequest = __webpack_require__(37);
+var isAbsoluteURL = __webpack_require__(39);
+var combineURLs = __webpack_require__(40);
 
 /**
  * Create a new instance of Axios
@@ -31010,7 +31242,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 20 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31029,13 +31261,13 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 21 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var createError = __webpack_require__(6);
+var createError = __webpack_require__(9);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -31062,7 +31294,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 22 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31090,7 +31322,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 23 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31165,7 +31397,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 24 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31209,7 +31441,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 25 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31284,7 +31516,7 @@ module.exports = (
 
 
 /***/ }),
-/* 26 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31327,7 +31559,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 27 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31387,7 +31619,7 @@ module.exports = (
 
 
 /***/ }),
-/* 28 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31446,16 +31678,16 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 29 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(0);
-var transformData = __webpack_require__(30);
-var isCancel = __webpack_require__(7);
-var defaults = __webpack_require__(2);
+var transformData = __webpack_require__(38);
+var isCancel = __webpack_require__(10);
+var defaults = __webpack_require__(3);
 
 /**
  * Throws a `Cancel` if cancellation has been requested.
@@ -31532,7 +31764,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 30 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31559,7 +31791,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 31 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31580,7 +31812,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 32 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31601,13 +31833,13 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 33 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var Cancel = __webpack_require__(8);
+var Cancel = __webpack_require__(11);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -31665,7 +31897,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 34 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -31699,7 +31931,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 35 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42265,10 +42497,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(36).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(44).setImmediate))
 
 /***/ }),
-/* 36 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -42321,13 +42553,13 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(37);
+__webpack_require__(45);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-/* 37 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -42517,22 +42749,1518 @@ exports.clearImmediate = clearImmediate;
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(7)))
 
 /***/ }),
-/* 38 */
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*!
+ * Vddl.js v0.5.3
+ * (c) 2017 Hejx
+ * Released under the MIT License.
+ * https://github.com/hejianxian/vddl#readme
+ */
+
+(function (global, factory) {
+   true ? module.exports = factory(__webpack_require__(47)) :
+  typeof define === 'function' && define.amd ? define(['lodash/each'], factory) :
+  (global.DragAndDropList = factory(global.each));
+}(this, (function (each) {
+
+each = 'default' in each ? each['default'] : each;
+
+var Draggable = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"vddl-draggable"},[_vm._t("default")],2)},staticRenderFns: [],
+  name: 'vddl-draggable',
+  // css: vddl-dragging, vddl-dragging-source
+  props: {
+    draggable: [ Object, Array ],
+    wrapper: Array,
+    index: Number,
+
+    effectAllowed: String,
+    type: String,
+
+    // diable
+    disableIf: Boolean,
+
+    // callback fn
+    dragstart: Function,
+    selected: Function,
+    dragend: Function,
+    moved: Function,
+    copied: Function,
+    canceled: Function,
+  },
+  data: function data() {
+    return {};
+  },
+  computed: {},
+  methods: {
+    handleDragstart: function handleDragstart(event) {
+      var this$1 = this;
+
+
+      var draggable = JSON.stringify(this.draggable);
+      // Check whether the element is draggable, since dragstart might be triggered on a child.
+      if (draggable == 'false' || this.disableIf) { return true; }
+
+      // Serialize the data associated with this element. IE only supports the Text drag type
+      event.dataTransfer.setData("Text", draggable);
+
+      // Only allow actions specified in effect-allowed attribute
+      event.dataTransfer.effectAllowed = this.effectAllowed || "move";
+
+      // Add CSS classes. IE9 not support 'classList'
+      this.$el.className = this.$el.className.trim() + " vddl-dragging";
+      setTimeout(function () {
+        this$1.$el.className = this$1.$el.className.trim() + " vddl-dragging-source";
+      }, 0);
+
+      // Workarounds for stupid browsers, see description below
+      this.vddlDropEffectWorkaround.dropEffect = "none";
+      this.vddlDragTypeWorkaround.isDragging = true;
+
+      // Save type of item in global state. Usually, this would go into the dataTransfer
+      // typename, but we have to use "Text" there to support IE
+      this.vddlDragTypeWorkaround.dragType = this.type || undefined;
+
+      // Try setting a proper drag image if triggered on a vddl-handle (won't work in IE).
+      if (event._dndHandle && event.dataTransfer.setDragImage) {
+        event.dataTransfer.setDragImage(this.$el, event._dndHandleLeft, event._dndHandleTop);
+      }
+
+      // Invoke callback
+      if (typeof(this.dragstart) === 'function') {
+        this.dragstart.call(this, event.target);
+      }
+
+      event.stopPropagation();
+    },
+
+    handleDragend: function handleDragend(event) {
+      var this$1 = this;
+
+      var dropEffect = this.vddlDropEffectWorkaround.dropEffect;
+      switch (dropEffect) {
+        case "move":
+          if (typeof(this.moved) === 'function') {
+            this.moved(this.index, event.target);
+          } else {
+            this.wrapper.splice(this.index, 1);
+          }
+          break;
+        case "copy":
+          if (typeof(this.copied) === 'function') {
+            this.copied(this.draggable, event.target);
+          }
+          break;
+        case "none":
+          if (typeof(this.canceled) === 'function') {
+            this.canceled(event.target);
+          }
+          break;
+      }
+      if (typeof(this.dragend) === 'function') {
+        this.dragend(dropEffect, event.target);
+      }
+
+      // Clean up
+      this.$el.className = this.$el.className.replace("vddl-dragging", "").trim();
+      setTimeout(function () {
+        if (this$1.$el) { this$1.$el.className = this$1.$el.className.replace("vddl-dragging-source", "").trim(); }
+      }, 0);
+      this.vddlDragTypeWorkaround.isDragging = false;
+      event.stopPropagation();
+    },
+
+    handleClick: function handleClick(event) {
+      if (!this.selected) { return; }
+
+      if (typeof(this.selected) === 'function') {
+        this.selected(this.wrapper[this.index], event.target);
+      }
+      event.stopPropagation();
+    },
+
+    /**
+     * Workaround to make element draggable in IE9
+     * http://stackoverflow.com/questions/5500615/internet-explorer-9-drag-and-drop-dnd
+     */
+    handleSelected: function handleSelected() {
+      if (this.dragDrop) { this.dragDrop(); }
+      return false;
+    },
+
+    // init
+    init: function init() {
+      var status = true;
+      if (this.disableIf) { status = false; }
+      this.$el.setAttribute('draggable', status);
+
+      this.$el.addEventListener('dragstart', this.handleDragstart, false);
+      this.$el.addEventListener('dragend', this.handleDragend, false);
+      this.$el.addEventListener('click', this.handleClick, false);
+      this.$el.addEventListener('selectstart', this.handleSelected, false);
+    },
+  },
+  watch: {
+    disableIf: function disableIf(val) {
+      this.$el.setAttribute('draggable', !val);
+    },
+  },
+  // For Vue 1.0
+  ready: function ready() {
+    this.init();
+  },
+  mounted: function mounted() {
+    this.init();
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.$el.removeEventListener('dragstart', this.handleDragstart, false);
+    this.$el.removeEventListener('dragend', this.handleDragend, false);
+    this.$el.removeEventListener('click', this.handleClick, false);
+    this.$el.removeEventListener('selectstart', this.handleSelected, false);
+  },
+};
+
+var List = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"vddl-list"},[_vm._t("default")],2)},staticRenderFns: [],
+  name: 'vddl-list',
+  // css: placeholder, dragover
+  props: {
+    list: Array,
+
+    allowedTypes: Array,
+    disableIf: Boolean,
+    horizontal: Boolean,
+    externalSources: Boolean,
+
+    dragover: Function,
+    inserted: Function,
+    drop: Function,
+  },
+  data: function data() {
+    return {};
+  },
+  computed: {},
+  methods: {
+    handleDragenter: function handleDragenter(event) {
+      if (!this.isDropAllowed(event)) { return true; }
+      event.preventDefault();
+    },
+
+    handleDragover: function handleDragover(event) {
+      var this$1 = this;
+
+      if (!this.isDropAllowed(event)) { return true; }
+
+      if (this.placeholderNode.parentNode != this.listNode) {
+        this.listNode.appendChild(this.placeholderNode);
+      }
+
+      if (event.target !== this.listNode) {
+        // Try to find the node direct directly below the list node.
+        var listItemNode = event.target;
+        while (listItemNode.parentNode !== this.listNode && listItemNode.parentNode) {
+          listItemNode = listItemNode.parentNode;
+        }
+        if (listItemNode.parentNode === this.listNode && listItemNode !== this.placeholderNode) {
+          // If the mouse pointer is in the upper half of the child element,
+          // we place it before the child element, otherwise below it.
+          if (this.isMouseInFirstHalf(event, listItemNode)) {
+            this.listNode.insertBefore(this.placeholderNode, listItemNode);
+          } else {
+            this.listNode.insertBefore(this.placeholderNode, listItemNode.nextSibling);
+          }
+        }
+      } else {
+        // This branch is reached when we are dragging directly over the list element.
+        // Usually we wouldn't need to do anything here, but the IE does not fire it's
+        // events for the child element, only for the list directly. Therefore, we repeat
+        // the positioning algorithm for IE here.
+        if (this.isMouseInFirstHalf(event, this.placeholderNode, true)) {
+          // Check if we should move the placeholder element one spot towards the top.
+          // Note that display none elements will have offsetTop and offsetHeight set to
+          // zero, therefore we need a special check for them.
+          while (this.placeholderNode.previousElementSibling
+                && (this.isMouseInFirstHalf(event, this.placeholderNode.previousElementSibling, true)
+                || this.placeholderNode.previousElementSibling.offsetHeight === 0)) {
+            this$1.listNode.insertBefore(this$1.placeholderNode, this$1.placeholderNode.previousElementSibling);
+          }
+        } else {
+          // Check if we should move the placeholder element one spot towards the bottom
+          while (this.placeholderNode.nextElementSibling &&
+                !this.isMouseInFirstHalf(event, this.placeholderNode.nextElementSibling, true)) {
+            this$1.listNode.insertBefore(this$1.placeholderNode,
+                this$1.placeholderNode.nextElementSibling.nextElementSibling);
+          }
+        }
+      }
+
+      // At this point we invoke the callback, which still can disallow the drop.
+      // We can't do this earlier because we want to pass the index of the placeholder.
+      if (this.dragover && !this.invokeCallback('dragover', event, this.getPlaceholderIndex())) {
+        return this.stopDragover(event);
+      }
+
+      if (this.$el.className.indexOf("vddl-dragover") < 0) { this.$el.className = this.$el.className.trim() + " vddl-dragover"; }
+
+      event.preventDefault();
+      event.stopPropagation();
+      return false;
+    },
+    handleDrop: function handleDrop(event) {
+      if (!this.isDropAllowed(event)) { return true; }
+
+      // The default behavior in Firefox is to interpret the dropped element as URL and
+      // forward to it. We want to prevent that even if our drop is aborted.
+      event.preventDefault();
+
+      // Unserialize the data that was serialized in dragstart. According to the HTML5 specs,
+      // the "Text" drag type will be converted to text/plain, but IE does not do that.
+      var data = event.dataTransfer.getData("Text") || event.dataTransfer.getData("text/plain");
+      var transferredObject;
+      try {
+        transferredObject = JSON.parse(data);
+      } catch(e) {
+        return this.stopDragover();
+      }
+
+      // Invoke the callback, which can transform the transferredObject and even abort the drop.
+      var index = this.getPlaceholderIndex();
+      if (this.drop) {
+        transferredObject = this.invokeCallback('drop', event, index, transferredObject);
+        if (!transferredObject) {
+          return this.stopDragover();
+        }
+      }
+
+      // Insert the object into the array, unless drop took care of that (returned true).
+      if (transferredObject !== true) {
+        this.list.splice(index, 0, transferredObject);
+      }
+      this.invokeCallback('inserted', event, index, transferredObject);
+
+      // In Chrome on Windows the dropEffect will always be none...
+      // We have to determine the actual effect manually from the allowed effects
+      if (event.dataTransfer.dropEffect === "none") {
+        if (event.dataTransfer.effectAllowed === "copy" ||
+            event.dataTransfer.effectAllowed === "move") {
+          this.vddlDropEffectWorkaround.dropEffect = event.dataTransfer.effectAllowed;
+        } else {
+          this.vddlDropEffectWorkaround.dropEffect = event.ctrlKey ? "copy" : "move";
+        }
+      } else {
+        this.vddlDropEffectWorkaround.dropEffect = event.dataTransfer.dropEffect;
+      }
+
+      // Clean up
+      this.stopDragover();
+      event.stopPropagation();
+      return false;
+    },
+    handleDragleave: function handleDragleave(event) {
+      var this$1 = this;
+
+      this.$el.className = this.$el.className.replace("vddl-dragover", "").trim();
+      setTimeout(function () {
+        if (this$1.$el.className.indexOf("vddl-dragover") < 0) {
+          this$1.placeholderNode.parentNode && this$1.placeholderNode.parentNode.removeChild(this$1.placeholderNode);
+        }
+      }, 100);
+    },
+
+    // Checks whether the mouse pointer is in the first half of the given target element.
+    isMouseInFirstHalf: function isMouseInFirstHalf(event, targetNode, relativeToParent) {
+      var mousePointer = this.horizontal ? (event.offsetX || event.layerX)
+                                    : (event.offsetY || event.layerY);
+      var targetSize = this.horizontal ? targetNode.offsetWidth : targetNode.offsetHeight;
+      var targetPosition = this.horizontal ? targetNode.offsetLeft : targetNode.offsetTop;
+      targetPosition = relativeToParent ? targetPosition : 0;
+      return mousePointer < targetPosition + targetSize / 2;
+    },
+
+    /**
+     * Tries to find a child element that has the 'vddl-placeholder' class set. If none was found, a
+     * new div element is created.
+     */
+    getPlaceholderElement: function getPlaceholderElement() {
+      var placeholder,
+          oldPlaceholder = this.$el.parentNode.querySelectorAll('.vddl-placeholder');
+      if (oldPlaceholder.length > 0) {
+        placeholder = oldPlaceholder[0];
+        return placeholder;
+      }
+      var newPlaceholder = document.createElement('div');
+      newPlaceholder.setAttribute('class', 'vddl-placeholder');
+      return newPlaceholder;
+    },
+
+    getPlaceholderIndex: function getPlaceholderIndex() {
+      return Array.prototype.indexOf.call(this.listNode.children, this.placeholderNode);
+    },
+
+    /**
+     * Checks various conditions that must be fulfilled for a drop to be allowed
+     */
+    isDropAllowed: function isDropAllowed(event) {
+      // Disallow drop from external source unless it's allowed explicitly.
+      if (!this.vddlDragTypeWorkaround.isDragging && !this.externalSources) { return false; }
+
+      // Check mimetype. Usually we would use a custom drag type instead of Text, but IE doesn't
+      // support that.
+      if (!this.hasTextMimetype(event.dataTransfer.types)) { return false; }
+
+      // Now check the allowed-types against the type of the incoming element. For drops from
+      // external sources we don't know the type, so it will need to be checked via drop.
+      if (this.allowedTypes && this.vddlDragTypeWorkaround.isDragging) {
+        var allowed = this.allowedTypes;
+        if (Array.isArray(allowed) && allowed.indexOf(this.vddlDragTypeWorkaround.dragType) === -1) {
+          return false;
+        }
+      }
+
+      // Check whether droping is disabled completely
+      if (this.disableIf) { return false; }
+
+      return true;
+    },
+
+    /**
+     * Small helper function that cleans up if we aborted a drop.
+     */
+    stopDragover: function stopDragover() {
+      this.placeholderNode.parentNode && this.placeholderNode.parentNode.removeChild(this.placeholderNode);
+      this.$el.className = this.$el.className.replace("vddl-dragover", "").trim();
+      return true;
+    },
+
+    /**
+     * Invokes a callback with some interesting parameters and returns the callbacks return value.
+     */
+    invokeCallback: function invokeCallback(expression, event, index, item) {
+      var fn = this[expression];
+      if (fn) {
+        fn({
+          event: event,
+          index: index,
+          item: item || undefined,
+          external: !this.vddlDragTypeWorkaround.isDragging,
+          type: this.vddlDragTypeWorkaround.isDragging ? this.vddlDragTypeWorkaround.dragType : undefined
+        });
+      }
+      return fn ? true : false;
+    },
+
+    /**
+     * Check if the dataTransfer object contains a drag type that we can handle. In old versions
+     * of IE the types collection will not even be there, so we just assume a drop is possible.
+     */
+    hasTextMimetype: function hasTextMimetype(types) {
+      if (!types) { return true; }
+        for (var i = 0; i < types.length; i += 1) {
+          if (types[i] === "Text" || types[i] === "text/plain") { return true; }
+        }
+
+      return false;
+    },
+    init: function init() {
+      this.placeholderNode = this.getPlaceholderElement();
+      this.listNode = this.$el;
+      this.placeholderNode.parentNode && this.placeholderNode.parentNode.removeChild(this.placeholderNode);
+
+      // bind events
+      this.$el.addEventListener('dragenter', this.handleDragenter, false);
+      this.$el.addEventListener('dragover', this.handleDragover, false);
+      this.$el.addEventListener('drop', this.handleDrop, false);
+      this.$el.addEventListener('dragleave', this.handleDragleave, false);
+    },
+  },
+  ready: function ready() {
+    this.init();
+  },
+  mounted: function mounted() {
+    this.init();
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.$el.removeEventListener('dragenter', this.handleDragenter, false);
+    this.$el.removeEventListener('dragover', this.handleDragover, false);
+    this.$el.removeEventListener('drop', this.handleDrop, false);
+    this.$el.removeEventListener('dragleave', this.handleDragleave, false);
+  },
+};
+
+var Handle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"vddl-handle"},[_vm._t("default")],2)},staticRenderFns: [],
+  name: 'vddl-handle',
+  props: {
+    handleLeft: Number,
+    handleTop: Number,
+  },
+  data: function data() {
+    return {};
+  },
+  computed: {},
+  methods: {
+    handle: function handle(event) {
+      event._dndHandle = true;
+      event._dndHandleLeft = this.handleLeft || 0;
+      event._dndHandleTop = this.handleTop || 0;
+    },
+    init: function init() {
+      this.$el.setAttribute('draggable', true);
+
+      this.$el.addEventListener('dragstart', this.handle, false);
+      this.$el.addEventListener('dragend', this.handle, false);
+    },
+  },
+  ready: function ready() {
+    this.init();
+  },
+  mounted: function mounted() {
+    this.init();
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.$el.removeEventListener('dragstart', this.handle, false);
+    this.$el.removeEventListener('dragend', this.handle, false);
+  },
+};
+
+var Nodrag = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"vddl-nodrag"},[_vm._t("default")],2)},staticRenderFns: [],
+  name: 'vddl-nodrag',
+  props: {},
+  data: function data() {
+    return {};
+  },
+  computed: {},
+  methods: {
+    handleDragstart: function handleDragstart(event) {
+      if (!event._dndHandle) {
+        // If a child element already reacted to dragstart and set a dataTransfer object, we will
+        // allow that. For example, this is the case for user selections inside of input elements.
+        if (!(event.dataTransfer.types && event.dataTransfer.types.length)) {
+          event.preventDefault();
+        }
+        event.stopPropagation();
+      }
+    },
+    handleDragend: function handleDragend(event) {
+      if (!event._dndHandle) {
+        event.stopPropagation();
+      }
+    },
+    init: function init() {
+      this.$el.setAttribute('draggable', true);
+
+      this.$el.addEventListener('dragstart', this.handleDragstart, false);
+      this.$el.addEventListener('dragend', this.handleDragend, false);
+    },
+  },
+  ready: function ready() {
+    this.init();
+  },
+  mounted: function mounted() {
+    this.init();
+  },
+  beforeDestroy: function beforeDestroy() {
+    this.$el.removeEventListener('dragstart', this.handleDragstart, false);
+    this.$el.removeEventListener('dragend', this.handleDragend, false);
+  },
+};
+
+var Placeholder = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"vddl-placeholder"},[_vm._t("default")],2)},staticRenderFns: [],
+  name: 'vddl-placeholder',
+};
+
+var components = {
+  Draggable: Draggable,
+  List: List,
+  Handle: Handle,
+  Nodrag: Nodrag,
+  Placeholder: Placeholder,
+};
+
+var install$1 = {
+  install: function install(Vue) {
+    /* eslint no-param-reassign: 0 */
+    Vue.prototype.vddlDropEffectWorkaround = {};
+    Vue.prototype.vddlDragTypeWorkaround = {};
+
+    each(components, function (component) {
+      /* eslint no-undef: 0 */
+      Vue.component(component.name, component);
+    });
+  },
+};
+
+return install$1;
+
+})));
+
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(48);
+
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayEach = __webpack_require__(49),
+    baseEach = __webpack_require__(50),
+    castFunction = __webpack_require__(75),
+    isArray = __webpack_require__(15);
+
+/**
+ * Iterates over elements of `collection` and invokes `iteratee` for each element.
+ * The iteratee is invoked with three arguments: (value, index|key, collection).
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
+ *
+ * **Note:** As with other "Collections" methods, objects with a "length"
+ * property are iterated like arrays. To avoid this behavior use `_.forIn`
+ * or `_.forOwn` for object iteration.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @alias each
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ * @see _.forEachRight
+ * @example
+ *
+ * _.forEach([1, 2], function(value) {
+ *   console.log(value);
+ * });
+ * // => Logs `1` then `2`.
+ *
+ * _.forEach({ 'a': 1, 'b': 2 }, function(value, key) {
+ *   console.log(key);
+ * });
+ * // => Logs 'a' then 'b' (iteration order is not guaranteed).
+ */
+function forEach(collection, iteratee) {
+  var func = isArray(collection) ? arrayEach : baseEach;
+  return func(collection, castFunction(iteratee));
+}
+
+module.exports = forEach;
+
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+/**
+ * A specialized version of `_.forEach` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns `array`.
+ */
+function arrayEach(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  while (++index < length) {
+    if (iteratee(array[index], index, array) === false) {
+      break;
+    }
+  }
+  return array;
+}
+
+module.exports = arrayEach;
+
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseForOwn = __webpack_require__(51),
+    createBaseEach = __webpack_require__(74);
+
+/**
+ * The base implementation of `_.forEach` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ */
+var baseEach = createBaseEach(baseForOwn);
+
+module.exports = baseEach;
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseFor = __webpack_require__(52),
+    keys = __webpack_require__(54);
+
+/**
+ * The base implementation of `_.forOwn` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Object} Returns `object`.
+ */
+function baseForOwn(object, iteratee) {
+  return object && baseFor(object, iteratee, keys);
+}
+
+module.exports = baseForOwn;
+
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var createBaseFor = __webpack_require__(53);
+
+/**
+ * The base implementation of `baseForOwn` which iterates over `object`
+ * properties returned by `keysFunc` and invokes `iteratee` for each property.
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @param {Function} keysFunc The function to get the keys of `object`.
+ * @returns {Object} Returns `object`.
+ */
+var baseFor = createBaseFor();
+
+module.exports = baseFor;
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports) {
+
+/**
+ * Creates a base function for methods like `_.forIn` and `_.forOwn`.
+ *
+ * @private
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseFor(fromRight) {
+  return function(object, iteratee, keysFunc) {
+    var index = -1,
+        iterable = Object(object),
+        props = keysFunc(object),
+        length = props.length;
+
+    while (length--) {
+      var key = props[fromRight ? length : ++index];
+      if (iteratee(iterable[key], key, iterable) === false) {
+        break;
+      }
+    }
+    return object;
+  };
+}
+
+module.exports = createBaseFor;
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var arrayLikeKeys = __webpack_require__(55),
+    baseKeys = __webpack_require__(68),
+    isArrayLike = __webpack_require__(17);
+
+/**
+ * Creates an array of the own enumerable property names of `object`.
+ *
+ * **Note:** Non-object values are coerced to objects. See the
+ * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
+ * for more details.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ *   this.b = 2;
+ * }
+ *
+ * Foo.prototype.c = 3;
+ *
+ * _.keys(new Foo);
+ * // => ['a', 'b'] (iteration order is not guaranteed)
+ *
+ * _.keys('hi');
+ * // => ['0', '1']
+ */
+function keys(object) {
+  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+}
+
+module.exports = keys;
+
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseTimes = __webpack_require__(56),
+    isArguments = __webpack_require__(57),
+    isArray = __webpack_require__(15),
+    isBuffer = __webpack_require__(61),
+    isIndex = __webpack_require__(63),
+    isTypedArray = __webpack_require__(64);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Creates an array of the enumerable property names of the array-like `value`.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @param {boolean} inherited Specify returning inherited property names.
+ * @returns {Array} Returns the array of property names.
+ */
+function arrayLikeKeys(value, inherited) {
+  var isArr = isArray(value),
+      isArg = !isArr && isArguments(value),
+      isBuff = !isArr && !isArg && isBuffer(value),
+      isType = !isArr && !isArg && !isBuff && isTypedArray(value),
+      skipIndexes = isArr || isArg || isBuff || isType,
+      result = skipIndexes ? baseTimes(value.length, String) : [],
+      length = result.length;
+
+  for (var key in value) {
+    if ((inherited || hasOwnProperty.call(value, key)) &&
+        !(skipIndexes && (
+           // Safari 9 has enumerable `arguments.length` in strict mode.
+           key == 'length' ||
+           // Node.js 0.10 has enumerable non-index properties on buffers.
+           (isBuff && (key == 'offset' || key == 'parent')) ||
+           // PhantomJS 2 has enumerable non-index properties on typed arrays.
+           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
+           // Skip index properties.
+           isIndex(key, length)
+        ))) {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+module.exports = arrayLikeKeys;
+
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports) {
+
+/**
+ * The base implementation of `_.times` without support for iteratee shorthands
+ * or max array length checks.
+ *
+ * @private
+ * @param {number} n The number of times to invoke `iteratee`.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the array of results.
+ */
+function baseTimes(n, iteratee) {
+  var index = -1,
+      result = Array(n);
+
+  while (++index < n) {
+    result[index] = iteratee(index);
+  }
+  return result;
+}
+
+module.exports = baseTimes;
+
+
+/***/ }),
+/* 57 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseIsArguments = __webpack_require__(58),
+    isObjectLike = __webpack_require__(5);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/** Built-in value references. */
+var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+
+/**
+ * Checks if `value` is likely an `arguments` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArguments(function() { return arguments; }());
+ * // => true
+ *
+ * _.isArguments([1, 2, 3]);
+ * // => false
+ */
+var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
+  return isObjectLike(value) && hasOwnProperty.call(value, 'callee') &&
+    !propertyIsEnumerable.call(value, 'callee');
+};
+
+module.exports = isArguments;
+
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(4),
+    isObjectLike = __webpack_require__(5);
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]';
+
+/**
+ * The base implementation of `_.isArguments`.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+ */
+function baseIsArguments(value) {
+  return isObjectLike(value) && baseGetTag(value) == argsTag;
+}
+
+module.exports = baseIsArguments;
+
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var Symbol = __webpack_require__(12);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty.call(value, symToStringTag),
+      tag = value[symToStringTag];
+
+  try {
+    value[symToStringTag] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag] = tag;
+    } else {
+      delete value[symToStringTag];
+    }
+  }
+  return result;
+}
+
+module.exports = getRawTag;
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports) {
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+module.exports = objectToString;
+
+
+/***/ }),
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(13),
+    stubFalse = __webpack_require__(62);
+
+/** Detect free variable `exports`. */
+var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
+
+/** Detect the popular CommonJS extension `module.exports`. */
+var moduleExports = freeModule && freeModule.exports === freeExports;
+
+/** Built-in value references. */
+var Buffer = moduleExports ? root.Buffer : undefined;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeIsBuffer = Buffer ? Buffer.isBuffer : undefined;
+
+/**
+ * Checks if `value` is a buffer.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.3.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
+ * @example
+ *
+ * _.isBuffer(new Buffer(2));
+ * // => true
+ *
+ * _.isBuffer(new Uint8Array(2));
+ * // => false
+ */
+var isBuffer = nativeIsBuffer || stubFalse;
+
+module.exports = isBuffer;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ }),
+/* 62 */
+/***/ (function(module, exports) {
+
+/**
+ * This method returns `false`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.13.0
+ * @category Util
+ * @returns {boolean} Returns `false`.
+ * @example
+ *
+ * _.times(2, _.stubFalse);
+ * // => [false, false]
+ */
+function stubFalse() {
+  return false;
+}
+
+module.exports = stubFalse;
+
+
+/***/ }),
+/* 63 */
+/***/ (function(module, exports) {
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  length = length == null ? MAX_SAFE_INTEGER : length;
+  return !!length &&
+    (typeof value == 'number' || reIsUint.test(value)) &&
+    (value > -1 && value % 1 == 0 && value < length);
+}
+
+module.exports = isIndex;
+
+
+/***/ }),
+/* 64 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseIsTypedArray = __webpack_require__(65),
+    baseUnary = __webpack_require__(66),
+    nodeUtil = __webpack_require__(67);
+
+/* Node.js helper references. */
+var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+
+/**
+ * Checks if `value` is classified as a typed array.
+ *
+ * @static
+ * @memberOf _
+ * @since 3.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
+ * @example
+ *
+ * _.isTypedArray(new Uint8Array);
+ * // => true
+ *
+ * _.isTypedArray([]);
+ * // => false
+ */
+var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
+
+module.exports = isTypedArray;
+
+
+/***/ }),
+/* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(4),
+    isLength = __webpack_require__(16),
+    isObjectLike = __webpack_require__(5);
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    arrayTag = '[object Array]',
+    boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    errorTag = '[object Error]',
+    funcTag = '[object Function]',
+    mapTag = '[object Map]',
+    numberTag = '[object Number]',
+    objectTag = '[object Object]',
+    regexpTag = '[object RegExp]',
+    setTag = '[object Set]',
+    stringTag = '[object String]',
+    weakMapTag = '[object WeakMap]';
+
+var arrayBufferTag = '[object ArrayBuffer]',
+    dataViewTag = '[object DataView]',
+    float32Tag = '[object Float32Array]',
+    float64Tag = '[object Float64Array]',
+    int8Tag = '[object Int8Array]',
+    int16Tag = '[object Int16Array]',
+    int32Tag = '[object Int32Array]',
+    uint8Tag = '[object Uint8Array]',
+    uint8ClampedTag = '[object Uint8ClampedArray]',
+    uint16Tag = '[object Uint16Array]',
+    uint32Tag = '[object Uint32Array]';
+
+/** Used to identify `toStringTag` values of typed arrays. */
+var typedArrayTags = {};
+typedArrayTags[float32Tag] = typedArrayTags[float64Tag] =
+typedArrayTags[int8Tag] = typedArrayTags[int16Tag] =
+typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] =
+typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] =
+typedArrayTags[uint32Tag] = true;
+typedArrayTags[argsTag] = typedArrayTags[arrayTag] =
+typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] =
+typedArrayTags[dataViewTag] = typedArrayTags[dateTag] =
+typedArrayTags[errorTag] = typedArrayTags[funcTag] =
+typedArrayTags[mapTag] = typedArrayTags[numberTag] =
+typedArrayTags[objectTag] = typedArrayTags[regexpTag] =
+typedArrayTags[setTag] = typedArrayTags[stringTag] =
+typedArrayTags[weakMapTag] = false;
+
+/**
+ * The base implementation of `_.isTypedArray` without Node.js optimizations.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
+ */
+function baseIsTypedArray(value) {
+  return isObjectLike(value) &&
+    isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+}
+
+module.exports = baseIsTypedArray;
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports) {
+
+/**
+ * The base implementation of `_.unary` without support for storing metadata.
+ *
+ * @private
+ * @param {Function} func The function to cap arguments for.
+ * @returns {Function} Returns the new capped function.
+ */
+function baseUnary(func) {
+  return function(value) {
+    return func(value);
+  };
+}
+
+module.exports = baseUnary;
+
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(14);
+
+/** Detect free variable `exports`. */
+var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
+
+/** Detect the popular CommonJS extension `module.exports`. */
+var moduleExports = freeModule && freeModule.exports === freeExports;
+
+/** Detect free variable `process` from Node.js. */
+var freeProcess = moduleExports && freeGlobal.process;
+
+/** Used to access faster Node.js helpers. */
+var nodeUtil = (function() {
+  try {
+    return freeProcess && freeProcess.binding && freeProcess.binding('util');
+  } catch (e) {}
+}());
+
+module.exports = nodeUtil;
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
+
+/***/ }),
+/* 68 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isPrototype = __webpack_require__(69),
+    nativeKeys = __webpack_require__(70);
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ */
+function baseKeys(object) {
+  if (!isPrototype(object)) {
+    return nativeKeys(object);
+  }
+  var result = [];
+  for (var key in Object(object)) {
+    if (hasOwnProperty.call(object, key) && key != 'constructor') {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+module.exports = baseKeys;
+
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports) {
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/**
+ * Checks if `value` is likely a prototype object.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
+ */
+function isPrototype(value) {
+  var Ctor = value && value.constructor,
+      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto;
+
+  return value === proto;
+}
+
+module.exports = isPrototype;
+
+
+/***/ }),
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var overArg = __webpack_require__(71);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeKeys = overArg(Object.keys, Object);
+
+module.exports = nativeKeys;
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports) {
+
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+module.exports = overArg;
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseGetTag = __webpack_require__(4),
+    isObject = __webpack_require__(73);
+
+/** `Object#toString` result references. */
+var asyncTag = '[object AsyncFunction]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    proxyTag = '[object Proxy]';
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction(value) {
+  if (!isObject(value)) {
+    return false;
+  }
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 9 which returns 'object' for typed arrays and other constructors.
+  var tag = baseGetTag(value);
+  return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+}
+
+module.exports = isFunction;
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports) {
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+module.exports = isObject;
+
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var isArrayLike = __webpack_require__(17);
+
+/**
+ * Creates a `baseEach` or `baseEachRight` function.
+ *
+ * @private
+ * @param {Function} eachFunc The function to iterate over a collection.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseEach(eachFunc, fromRight) {
+  return function(collection, iteratee) {
+    if (collection == null) {
+      return collection;
+    }
+    if (!isArrayLike(collection)) {
+      return eachFunc(collection, iteratee);
+    }
+    var length = collection.length,
+        index = fromRight ? length : -1,
+        iterable = Object(collection);
+
+    while ((fromRight ? index-- : ++index < length)) {
+      if (iteratee(iterable[index], index, iterable) === false) {
+        break;
+      }
+    }
+    return collection;
+  };
+}
+
+module.exports = createBaseEach;
+
+
+/***/ }),
+/* 75 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var identity = __webpack_require__(76);
+
+/**
+ * Casts `value` to `identity` if it's not a function.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @returns {Function} Returns cast function.
+ */
+function castFunction(value) {
+  return typeof value == 'function' ? value : identity;
+}
+
+module.exports = castFunction;
+
+
+/***/ }),
+/* 76 */
+/***/ (function(module, exports) {
+
+/**
+ * This method returns the first argument it receives.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {*} value Any value.
+ * @returns {*} Returns `value`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ *
+ * console.log(_.identity(object) === object);
+ * // => true
+ */
+function identity(value) {
+  return value;
+}
+
+module.exports = identity;
+
+
+/***/ }),
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(39)
+  __webpack_require__(78)
 }
-var normalizeComponent = __webpack_require__(44)
+var normalizeComponent = __webpack_require__(83)
 /* script */
-var __vue_script__ = __webpack_require__(45)
+var __vue_script__ = __webpack_require__(84)
 /* template */
-var __vue_template__ = __webpack_require__(46)
+var __vue_template__ = __webpack_require__(85)
 /* template functional */
   var __vue_template_functional__ = false
 /* styles */
@@ -42572,17 +44300,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 39 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(40);
+var content = __webpack_require__(79);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(42)("0e163906", content, false);
+var update = __webpack_require__(81)("0e163906", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -42598,10 +44326,10 @@ if(false) {
 }
 
 /***/ }),
-/* 40 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(41)(undefined);
+exports = module.exports = __webpack_require__(80)(undefined);
 // imports
 
 
@@ -42612,7 +44340,7 @@ exports.push([module.i, "\n.mdl-list__item-check {\n    padding-left: 5px;\n}\n"
 
 
 /***/ }),
-/* 41 */
+/* 80 */
 /***/ (function(module, exports) {
 
 /*
@@ -42694,7 +44422,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 42 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -42713,7 +44441,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(43)
+var listToStyles = __webpack_require__(82)
 
 /*
 type StyleObject = {
@@ -42915,7 +44643,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 43 */
+/* 82 */
 /***/ (function(module, exports) {
 
 /**
@@ -42948,7 +44676,7 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-/* 44 */
+/* 83 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -43057,7 +44785,7 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 45 */
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43081,14 +44809,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['task'],
+    components: [''],
     methods: {
         getCheckboxId: function getCheckboxId(id) {
             return 'list-checkbox-' + id;
@@ -43100,7 +44824,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 46 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -43108,8 +44832,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("li", { staticClass: "mdl-list__item" }, [
-    _vm._m(0),
-    _vm._v(" "),
     _c("span", { staticClass: "mdl-list__item-check" }, [
       _c(
         "label",
@@ -43135,22 +44857,10 @@ var render = function() {
       _vm._v("\n        " + _vm._s(_vm.task.name) + "\n    ")
     ]),
     _vm._v(" "),
-    _vm._m(1)
+    _vm._m(0)
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", [
-      _c(
-        "button",
-        { staticClass: "mdl-button mdl-js-button mdl-button--icon" },
-        [_c("i", { staticClass: "material-icons" }, [_vm._v("blur_on")])]
-      )
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -43174,7 +44884,7 @@ if (false) {
 }
 
 /***/ }),
-/* 47 */
+/* 86 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
