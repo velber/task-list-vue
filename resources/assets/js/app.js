@@ -17,24 +17,14 @@ window.Vue = require('vue');
 import Vddl from 'vddl';
 
 Vue.use(Vddl);
-Vue.component('task', require('./components/Task.vue'));
+Vue.component('task-list', require('./components/Task.vue'));
 
 const app = new Vue({
     el: '#app',
     data: {
-        tasks: [],
-        "list": [
-            {
-                "id": 1,
-                "label": "Item A1"
-            },
-            {
-                "id": 2,
-                "label": "Item A2"
-            }
-        ]
+        tasks: []
     },
     created() {
-        axios.get('/tasks').then(response => this.tasks = response.data);
+        //
     }
 });

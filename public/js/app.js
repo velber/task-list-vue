@@ -1240,26 +1240,15 @@ window.Vue = __webpack_require__(43);
 
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0_vddl___default.a);
-Vue.component('task', __webpack_require__(77));
+Vue.component('task-list', __webpack_require__(77));
 
 var app = new Vue({
     el: '#app',
     data: {
-        tasks: [],
-        "list": [{
-            "id": 1,
-            "label": "Item A1"
-        }, {
-            "id": 2,
-            "label": "Item A2"
-        }]
+        tasks: []
     },
     created: function created() {
-        var _this = this;
-
-        axios.get('/tasks').then(function (response) {
-            return _this.tasks = response.data;
-        });
+        //
     }
 });
 
@@ -44334,7 +44323,7 @@ exports = module.exports = __webpack_require__(80)(undefined);
 
 
 // module
-exports.push([module.i, "\n.mdl-list__item-check {\n    padding-left: 5px;\n}\n", ""]);
+exports.push([module.i, "\n.vddl-nodrag {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.vddl-handle {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.mdl-list__item {\n    -webkit-box-flex: 2;\n        -ms-flex-positive: 2;\n            flex-grow: 2;\n}\n.mdl-list__item-check {\n    padding-left: 5px;\n}\n", ""]);
 
 // exports
 
@@ -44809,17 +44798,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['task'],
-    components: [''],
+    data: function data() {
+        return {
+            tasks: []
+        };
+    },
+
+    components: {},
     methods: {
         getCheckboxId: function getCheckboxId(id) {
             return 'list-checkbox-' + id;
         }
     },
-    mounted: function mounted() {
-        //console.log(this.task);
+    created: function created() {
+        var _this = this;
+
+        axios.get('/tasks').then(function (response) {
+            return _this.tasks = response.data;
+        });
     }
 });
 
@@ -44831,49 +44851,122 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("li", { staticClass: "mdl-list__item" }, [
-    _c("span", { staticClass: "mdl-list__item-check" }, [
+  return _c(
+    "ul",
+    { staticClass: "demo-list-control mdl-list" },
+    [
       _c(
-        "label",
+        "vddl-list",
         {
-          staticClass: "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect",
-          staticStyle: { width: "30px" },
-          attrs: { for: _vm.getCheckboxId(_vm.task.id) }
+          staticClass: "panel__body--list",
+          attrs: { list: _vm.tasks, horizontal: false }
         },
-        [
-          _c("input", {
-            staticClass: "mdl-checkbox__input",
-            attrs: {
-              type: "checkbox",
-              id: _vm.getCheckboxId(_vm.task.id),
-              checked: ""
-            }
-          })
-        ]
+        _vm._l(_vm.tasks, function(task, key, index) {
+          return _c(
+            "vddl-draggable",
+            {
+              key: task.id,
+              attrs: {
+                draggable: task,
+                index: index,
+                wrapper: _vm.tasks,
+                "effect-allowed": "move"
+              }
+            },
+            [
+              _c(
+                "vddl-nodrag",
+                { staticClass: "nodrag" },
+                [
+                  _c(
+                    "vddl-handle",
+                    {
+                      staticClass: "handle",
+                      attrs: { "handle-left": 20, "handle-top": 20 }
+                    },
+                    [
+                      _c(
+                        "button",
+                        {
+                          staticClass:
+                            "mdl-button mdl-js-button mdl-button--icon"
+                        },
+                        [
+                          _c("i", { staticClass: "material-icons" }, [
+                            _vm._v("blur_on")
+                          ])
+                        ]
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "mdl-list__item" }, [
+                    _c("span", { staticClass: "mdl-list__item-check" }, [
+                      _c(
+                        "label",
+                        {
+                          staticClass:
+                            "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect",
+                          staticStyle: { width: "30px" },
+                          attrs: { for: _vm.getCheckboxId(task.id) }
+                        },
+                        [
+                          _c("input", {
+                            staticClass: "mdl-checkbox__input",
+                            attrs: {
+                              type: "checkbox",
+                              id: _vm.getCheckboxId(task.id),
+                              checked: ""
+                            }
+                          })
+                        ]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      { staticClass: "mdl-list__item-primary-content" },
+                      [
+                        _vm._v(
+                          "\n                        " +
+                            _vm._s(task.name) +
+                            "\n                    "
+                        )
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "span",
+                      { staticClass: "mdl-list__item-secondary-action" },
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass:
+                              "mdl-button mdl-js-button mdl-button--icon"
+                          },
+                          [
+                            _c("i", { staticClass: "material-icons" }, [
+                              _vm._v("cancel")
+                            ])
+                          ]
+                        )
+                      ]
+                    )
+                  ])
+                ],
+                1
+              )
+            ],
+            1
+          )
+        })
       )
-    ]),
-    _vm._v(" "),
-    _c("span", { staticClass: "mdl-list__item-primary-content" }, [
-      _vm._v("\n        " + _vm._s(_vm.task.name) + "\n    ")
-    ]),
-    _vm._v(" "),
-    _vm._m(0)
-  ])
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("span", { staticClass: "mdl-list__item-secondary-action" }, [
-      _c(
-        "button",
-        { staticClass: "mdl-button mdl-js-button mdl-button--icon" },
-        [_c("i", { staticClass: "material-icons" }, [_vm._v("cancel")])]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
