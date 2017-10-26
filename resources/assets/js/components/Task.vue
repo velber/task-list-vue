@@ -1,45 +1,26 @@
 <template>
-    <ul class="demo-list-control mdl-list">
-        <vddl-list class="panel__body--list" :list="tasks" :horizontal="false">
-            <vddl-draggable v-for="(task, key, index) in tasks"
-                            :draggable="task"
-                            :index="index"
-                            :wrapper="tasks"
-                            effect-allowed="move"
-                            :key="task.id">
-                <vddl-nodrag class="nodrag">
-                    <vddl-handle
-                            :handle-left="20"
-                            :handle-top="20"
-                            class="handle">
-                        <button class="mdl-button mdl-js-button mdl-button--icon">
-                            <i class="material-icons">blur_on</i>
-                        </button>
-                    </vddl-handle>
-                    <li class="mdl-list__item">
-                        <span class="mdl-list__item-check">
-                            <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
-                                   :for="getCheckboxId(task.id)"
-                                   style="width: 30px;">
-                               <input type="checkbox" :id="getCheckboxId(task.id)" class="mdl-checkbox__input" checked/>
-                            </label>
-                        </span>
-                        <span class="mdl-list__item-primary-content">
-                            {{ task.name }}
-                        </span>
-                        <span class="mdl-list__item-secondary-action">
-                            <button class="mdl-button mdl-js-button mdl-button--icon">
-                                <i class="material-icons">cancel</i>
-                            </button>
-                        </span>
-                    </li>
-                </vddl-nodrag>
-            </vddl-draggable>
-        </vddl-list>
-    </ul>
+    <draggable v-model="tasks" :options="{handle:'.handle'}" @start="drag=true" @end="drag=false" clas="mdl-list">
+        <li class="mdl-list__item" v-for="task in tasks">
+            <span class="mdl-list__item-primary-content">
+                <button class="mdl-button mdl-js-button mdl-button--icon handle">
+                    <i class="material-icons">blur_on</i>
+                </button>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" :for="getCheckboxId(task.id)">
+                    <input type="checkbox" :id="getCheckboxId(task.id)" class="mdl-checkbox__input" checked/>
+                </label>
+                <span contenteditable="true" class="editable">{{ task.name }}</span>
+            </span>
+            <span class="mdl-list__item-secondary-action">
+                <button class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">cancel</i>
+                </button>
+            </span>
+        </li>
+    </draggable>
 </template>
 
 <script>
+    var Draggable = require('vuedraggable')
     export default {
         data() {
             return {
@@ -47,7 +28,7 @@
             }
         },
         components: {
-
+            draggable: Draggable
         },
         methods: {
             getCheckboxId(id) {
@@ -61,17 +42,15 @@
 </script>
 
 <style>
-    .vddl-nodrag {
-        display: flex;
+    .mdl-checkbox {
+        width: 24px;
     }
-    .vddl-handle {
-        display: flex;
-        align-items: center;
+
+    .handle {
+        margin-right: 15px;
     }
-    .mdl-list__item {
-        flex-grow: 2;
-    }
-    .mdl-list__item-check {
-        padding-left: 5px;
+
+    .editable {
+        padding: 8px 4px;
     }
 </style>

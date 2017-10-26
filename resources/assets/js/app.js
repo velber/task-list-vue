@@ -14,9 +14,8 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-import Vddl from 'vddl';
 
-Vue.use(Vddl);
+var draggable = require('vuedraggable')
 Vue.component('task-list', require('./components/Task.vue'));
 
 const app = new Vue({
