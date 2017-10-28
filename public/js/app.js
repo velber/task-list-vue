@@ -44483,7 +44483,7 @@ exports = module.exports = __webpack_require__(43)(undefined);
 
 
 // module
-exports.push([module.i, "\n.vddl-nodrag {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n}\n.vddl-handle {\n    display: -webkit-box;\n    display: -ms-flexbox;\n    display: flex;\n    -webkit-box-align: center;\n        -ms-flex-align: center;\n            align-items: center;\n}\n.mdl-list__item {\n    -webkit-box-flex: 2;\n        -ms-flex-positive: 2;\n            flex-grow: 2;\n}\n.mdl-list__item-check {\n    padding-left: 5px;\n}\n", ""]);
+exports.push([module.i, "\n.mdl-checkbox {\n    width: 24px;\n}\n.handle {\n    margin-right: 15px;\n}\n.editable {\n    padding: 8px 4px;\n}\n", ""]);
 
 // exports
 
@@ -44951,6 +44951,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var Draggable = __webpack_require__(9);
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -44988,7 +44997,7 @@ var render = function() {
   return _c(
     "draggable",
     {
-      attrs: { options: { handle: ".handle" } },
+      attrs: { options: { handle: ".handle" }, clas: "mdl-list" },
       on: {
         start: function($event) {
           _vm.drag = true
@@ -45005,14 +45014,47 @@ var render = function() {
         expression: "tasks"
       }
     },
-    _vm._l(_vm.tasks, function(element) {
-      return _c("div", [
-        _c(
-          "button",
-          { staticClass: "mdl-button mdl-js-button mdl-button--icon handle" },
-          [_c("i", { staticClass: "material-icons" }, [_vm._v("blur_on")])]
-        ),
-        _vm._v("\n        " + _vm._s(element.name) + "\n    ")
+    _vm._l(_vm.tasks, function(task) {
+      return _c("li", { staticClass: "mdl-list__item" }, [
+        _c("span", { staticClass: "mdl-list__item-primary-content" }, [
+          _c(
+            "button",
+            { staticClass: "mdl-button mdl-js-button mdl-button--icon handle" },
+            [_c("i", { staticClass: "material-icons" }, [_vm._v("blur_on")])]
+          ),
+          _vm._v(" "),
+          _c(
+            "label",
+            {
+              staticClass: "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect",
+              attrs: { for: _vm.getCheckboxId(task.id) }
+            },
+            [
+              _c("input", {
+                staticClass: "mdl-checkbox__input",
+                attrs: {
+                  type: "checkbox",
+                  id: _vm.getCheckboxId(task.id),
+                  checked: ""
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "span",
+            { staticClass: "editable", attrs: { contenteditable: "true" } },
+            [_vm._v(_vm._s(task.name))]
+          )
+        ]),
+        _vm._v(" "),
+        _c("span", { staticClass: "mdl-list__item-secondary-action" }, [
+          _c(
+            "button",
+            { staticClass: "mdl-button mdl-js-button mdl-button--icon" },
+            [_c("i", { staticClass: "material-icons" }, [_vm._v("cancel")])]
+          )
+        ])
       ])
     })
   )

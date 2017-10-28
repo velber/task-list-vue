@@ -1,6 +1,7 @@
 <template>
-    <draggable v-model="tasks" :options="{handle:'.handle'}" @start="drag=true" @end="drag=false" clas="mdl-list">
-        <li class="mdl-list__item" v-for="task in tasks">
+    <draggable v-model="tasks" :options="{handle:'.handle'}" class="mdl-list"
+               @start="drag=true" @end="drag=false" @update="onMove">
+        <li class="mdl-list__item" v-for="task in tasks" :key="task.id" :data-id="task.id" :data-order="task.order">
             <span class="mdl-list__item-primary-content">
                 <button class="mdl-button mdl-js-button mdl-button--icon handle">
                     <i class="material-icons">blur_on</i>
@@ -20,7 +21,7 @@
 </template>
 
 <script>
-    var Draggable = require('vuedraggable')
+    var Draggable = require('vuedraggable');
     export default {
         data() {
             return {
@@ -33,6 +34,10 @@
         methods: {
             getCheckboxId(id) {
                 return `list-checkbox-${id}`;
+            },
+            onMove(e) {
+                console.log(e.item.dataset.id);
+                console.log(e.item.dataset.order);
             }
         },
         created() {
@@ -42,15 +47,27 @@
 </script>
 
 <style>
+    .mdl-list {
+        padding: 0;
+    }
+    .mdl-list__item {
+        margin-bottom: 15px;
+        background-color: #fbfffc;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+    }
     .mdl-checkbox {
         width: 24px;
     }
-
     .handle {
         margin-right: 15px;
     }
-
     .editable {
-        padding: 8px 4px;
+        outline: none;
+    }
+    .sortable-ghost {
+        background-color: #97b498;
+    }
+    .sortable-drag {
+        background-color: #fbfffc;
     }
 </style>

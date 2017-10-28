@@ -1,6 +1,10 @@
+// Vendor
+$vendor-light: #fbfffc;
+$vendor-medium: #c8e6c9;
+$vendor-dark: #97b498;
 
 // Body
-$body-bg: #f5f8fa;
+$body-bg: $vendor-medium;
 
 // Borders
 $laravel-border-color: darken($body-bg, 10%);
@@ -36,3 +40,5 @@ $input-color-placeholder: lighten($text-color, 30%);
 
 // Panels
 $panel-default-heading-bg: #fff;
+
+

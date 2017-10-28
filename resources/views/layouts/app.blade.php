@@ -11,7 +11,8 @@
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
         <!-- Main CSS file -->
-        <link href="{{ asset('/css/style.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ mix('/css/style.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ mix('/css/app.css') }}" rel="stylesheet" type="text/css" />
 
         <!-- Material design light -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
