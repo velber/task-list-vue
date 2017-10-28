@@ -23,7 +23,6 @@
     "webpack-livereload-plugin": "^1.0.0"
   },
   "dependencies": {
-    "vddl": "^0.5.3",
     "vuedraggable": "^2.14.1"
   }
 }
