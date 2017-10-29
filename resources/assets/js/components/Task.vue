@@ -1,7 +1,7 @@
 <template>
-    <draggable v-model="tasks" :options="{handle:'.handle'}" class="mdl-list"
+    <draggable v-model="tasks" :taskd="tasks" :options="{handle:'.handle'}" class="mdl-list"
                @start="drag=true" @end="drag=false" @update="onMove">
-        <li class="mdl-list__item" v-for="task in tasks" :key="task.id" :data-id="task.id" :data-order="task.order">
+        <li class="mdl-list__item" v-for="(task, index) in tasks" :key="task.id">
             <span class="mdl-list__item-primary-content">
                 <button class="mdl-button mdl-js-button mdl-button--icon handle">
                     <i class="material-icons">blur_on</i>
@@ -9,10 +9,12 @@
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" :for="getCheckboxId(task.id)">
                     <input type="checkbox" :id="getCheckboxId(task.id)" class="mdl-checkbox__input" checked/>
                 </label>
-                <span contenteditable="true" class="editable">{{ task.name }}</span>
+                <span contenteditable="true" class="editable" @blur="update(task.id, $event)">
+                    {{ task.name }}
+                </span>
             </span>
             <span class="mdl-list__item-secondary-action">
-                <button class="mdl-button mdl-js-button mdl-button--icon">
+                <button class="mdl-button mdl-js-button mdl-button--icon" @click="remove(index, task.id)">
                     <i class="material-icons">cancel</i>
                 </button>
             </span>
@@ -22,6 +24,7 @@
 
 <script>
     var Draggable = require('vuedraggable');
+
     export default {
         data() {
             return {
@@ -38,6 +41,18 @@
             onMove(e) {
                 console.log(e.item.dataset.id);
                 console.log(e.item.dataset.order);
+            },
+            update(id, e) {
+                this.$http.patch('/task/' + id, {
+                    name: e.target.textContent
+                }).then(response => console.log(response));
+            },
+            remove(i, id) {
+                this.$http.delete('/task/' + id, {}).then(response => {
+                    this.tasks.splice(i, 1);
+                }, response => {
+                    // error callback
+                });
             }
         },
         created() {

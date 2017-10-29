@@ -15,7 +15,16 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-var draggable = require('vuedraggable')
+var draggable = require('vuedraggable');
+
+var VueResource = require('vue-resource');
+Vue.use(VueResource);
+Vue.http.interceptors.push(function(request, next) {
+    request.headers.set('X-CSRF-TOKEN', window.axios.defaults.headers.common['X-CSRF-TOKEN']);
+    next();
+});
+
+
 Vue.component('task-list', require('./components/Task.vue'));
 
 const app = new Vue({
