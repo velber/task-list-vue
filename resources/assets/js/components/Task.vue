@@ -1,24 +1,29 @@
 <template>
     <draggable v-model="tasks" :taskd="tasks" :options="{handle:'.handle'}" class="mdl-list"
-               @start="drag=true" @end="drag=false" @update="onMove">
-        <li class="mdl-list__item" v-for="(task, index) in tasks" :key="task.id">
+               @start="drag=true" @end="drag=false" @update="move">
+        <div class="mdl-list__item" v-for="(task, index) in tasks" :key="task.id" :data-order="task.order" :data-id="task.id">
             <span class="mdl-list__item-primary-content">
                 <button class="mdl-button mdl-js-button mdl-button--icon handle">
                     <i class="material-icons">blur_on</i>
                 </button>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" :for="getCheckboxId(task.id)">
-                    <input type="checkbox" :id="getCheckboxId(task.id)" class="mdl-checkbox__input" checked/>
+                    <input type="checkbox" @change="check(task.id, $event)" :checked="task.status"
+                           :id="getCheckboxId(task.id)" class="mdl-checkbox__input"/>
                 </label>
-                <span contenteditable="true" class="editable" @blur="update(task.id, $event)">
-                    {{ task.name }}
-                </span>
+                <input type="text" class="mdl-list__input" @keyup="update(task.id, $event)" :value="task.name"
+                   :id="getInputId(task.id)">
+                </input>
             </span>
             <span class="mdl-list__item-secondary-action">
                 <button class="mdl-button mdl-js-button mdl-button--icon" @click="remove(index, task.id)">
                     <i class="material-icons">cancel</i>
                 </button>
             </span>
-        </li>
+        </div>
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"
+                slot="footer" @click="addTask">
+            <i class="material-icons">add</i>
+        </button>
     </draggable>
 </template>
 
@@ -28,35 +33,98 @@
     export default {
         data() {
             return {
-                tasks: []
+                tasks: [],
+                newItemId: null
             }
         },
         components: {
             draggable: Draggable
         },
         methods: {
+            move(e) {
+                let order = this.getOrder(e);
+                let id = e.item.dataset.id;
+
+                e.item.dataset.order = order;
+
+                this.$http.patch('/task/' + id, {
+                    order: order
+                });
+            },
+            check(id, e) {
+                let status = e.target.checked;
+                this.$http.patch('/task/' + id, {
+                    status: status
+                }).then(response => {
+                    //TODO cross annd move to down
+                });
+            },
+            update: _.debounce(function(id, e) {
+                let task = _.find(this.tasks, ['id', id]);
+                console.log(task)
+                task.name = e.target.value;
+                this.$http.patch('/task/' + id, {
+                    name: task.name
+                }).then(response => {
+                    // TODO show snak bar
+                }, response => {
+                    // TODO show snak bar with error
+                });
+            }, 500),
+            remove(i, id) {
+                this.$http.delete('/task/' + id, {}).then(response => {
+                    //TODO show snakbar
+                    this.tasks.splice(i, 1);
+                }, response => {
+                    //TODO show snackbari with error callback
+                });
+            },
+            addTask() {
+                this.$http.post('/task', {}).then(response => {
+                    let task = response.data.task;
+                    this.tasks.push(task);
+                    this.newItemId = task.id;
+            }, response => {
+                    //TODO error callback snackbar
+                });
+            },
             getCheckboxId(id) {
                 return `list-checkbox-${id}`;
             },
-            onMove(e) {
-                console.log(e.item.dataset.id);
-                console.log(e.item.dataset.order);
+            getInputId(id) {
+                return `list-input-${id}`;
             },
-            update(id, e) {
-                this.$http.patch('/task/' + id, {
-                    name: e.target.textContent
-                }).then(response => console.log(response));
+            getOrder(e) {
+                let newOrder;
+                let topOrder = _.isNull(e.item.previousSibling)
+                        ? null
+                        : _.toNumber(e.item.previousSibling.dataset.order);
+                let bottomOrder = _.isNull(e.item.nextSibling)
+                        ? null
+                        : _.toNumber(e.item.nextSibling.dataset.order);
+
+                if (_.isNull(topOrder)) {
+                    newOrder = bottomOrder + 1;
+                } else if (_.isNull(bottomOrder)) {
+                    newOrder = topOrder - 1;
+                } else {
+                    newOrder = _.divide(_.add(bottomOrder, topOrder), 2);
+                }
+
+                return newOrder;
             },
-            remove(i, id) {
-                this.$http.delete('/task/' + id, {}).then(response => {
-                    this.tasks.splice(i, 1);
-                }, response => {
-                    // error callback
-                });
+            focusNewTask() {
+                let $input = document.querySelector('#' + this.getInputId(this.newItemId));
+                if (! _.isNull($input)) {
+                    $input.focus();
+                }
             }
         },
         created() {
-            axios.get('/tasks').then(response => this.tasks = response.data);
+            this.$http.get('/tasks').then(response => this.tasks = response.data);
+        },
+        updated() {
+            this.focusNewTask();
         }
     };
 </script>
@@ -76,13 +144,21 @@
     .handle {
         margin-right: 15px;
     }
-    .editable {
+    .mdl-list__input {
         outline: none;
+        border: none;
+        width: 100%;
     }
     .sortable-ghost {
         background-color: #97b498;
     }
+    .sortable-ghost input {
+        background-color: #97b498;
+    }
     .sortable-drag {
         background-color: #fbfffc;
+    }
+    .mdl-button--fab {
+        float: right;
     }
 </style>

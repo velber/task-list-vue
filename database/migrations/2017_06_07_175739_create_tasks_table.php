@@ -15,14 +15,10 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 128);
-            $table->integer('status_id')->unsigned();
+            $table->string('name', 128)->nullable();
+            $table->boolean('status')->default(false);
             $table->double('order', 15, 8);
             $table->timestamps();
-        });
-
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->foreign('status_id')->references('id')->on('statuses');
         });
     }
 

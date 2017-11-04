@@ -17,7 +17,7 @@ $factory->define(App\Task::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->text(120),
         'order' => rand(1, 99),
-        'status_id' => rand(1, 3),
+        'status' => rand(0, 1),
         'created_at' => date('Y-m-d H:i:s'),
         'updated_at' =>  date('Y-m-d H:i:s'),
     ];

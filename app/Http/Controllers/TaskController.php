@@ -20,8 +20,7 @@ class TaskController extends Controller
 
     public function tasks()
     {
-        return Task::with('status')
-            ->orderBy('order', 'desc')
+        return Task::orderBy('order', 'desc')
             ->get();
     }
 
@@ -33,26 +32,16 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-
-        $this->validate($request, [
-            'name' => 'required|max:128',
-            'status_id' => 'required|integer|in:1,2,3',
-        ], [
-            'name.*' => 'Name is invalid!',
-            'status_id.*' => 'Status is invalid!',
-        ]);
-
-        $task = new Task($request->all());
-        $task->order = $task->max('order') + 100;
+        $task = new Task();
+        $task->order = $task->min('order') / 2;
 
         $result = $task->save();
 
-        $statuses = Status::all();
+        if (! $result) {
+            return response('', 500);
+        }
 
-        return response()->json([
-            'success' => (int) $result,
-            'task' => view('partials.task', compact('task', 'statuses'))->render(),
-        ]);
+        return response()->json(['task' => $task]);
     }
 
     /**
@@ -66,11 +55,11 @@ class TaskController extends Controller
     {
         $this->validate($request, [
             'name' => 'max:128',
-            'status_id' => 'integer|in:1,2,3',
+            'status' => 'boolean',
             'order' => 'numeric',
         ], [
             'name.*' => 'Name is invalid!',
-            'status_id.*' => 'Status is invalid!',
+            'status.*' => 'Status is invalid!',
             'order.*' => 'Status is invalid!',
         ]);
 
