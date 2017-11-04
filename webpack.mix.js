@@ -11,12 +11,18 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
-
-var LiveReloadPlugin = require('webpack-livereload-plugin');
-mix.webpackConfig({
-    plugins: [
-        new LiveReloadPlugin()
-    ]
-});
+mix.scripts([
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+    'node_modules/material-design-lite/dist/material.min.js'
+], 'public/js/vendor.js')
+    .js('resources/assets/js/app.js', 'public/js')
+    .styles([
+        'node_modules/material-design-lite/dist/material.green-red.min.css'
+    ], 'public/css/vendor.css')
+    .sass('resources/assets/sass/app.scss', 'public/css')
+    .browserSync('jobcrowd.dev')
+    .version()
+    .options({
+        processCssUrls: false
+    });

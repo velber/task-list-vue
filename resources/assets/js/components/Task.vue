@@ -61,22 +61,21 @@
             },
             update: _.debounce(function(id, e) {
                 let task = _.find(this.tasks, ['id', id]);
-                console.log(task)
                 task.name = e.target.value;
                 this.$http.patch('/task/' + id, {
                     name: task.name
                 }).then(response => {
-                    // TODO show snak bar
+                    this.showSnackBar('Task updated!');
                 }, response => {
-                    // TODO show snak bar with error
+                    this.showSnackBar('Error!');
                 });
             }, 500),
             remove(i, id) {
                 this.$http.delete('/task/' + id, {}).then(response => {
-                    //TODO show snakbar
                     this.tasks.splice(i, 1);
+                this.showSnackBar('Task deleted!');
                 }, response => {
-                    //TODO show snackbari with error callback
+                    this.showSnackBar('Error!');
                 });
             },
             addTask() {
@@ -85,7 +84,7 @@
                     this.tasks.push(task);
                     this.newItemId = task.id;
             }, response => {
-                    //TODO error callback snackbar
+                    this.showSnackBar('Error!');
                 });
             },
             getCheckboxId(id) {
@@ -118,6 +117,14 @@
                 if (! _.isNull($input)) {
                     $input.focus();
                 }
+            },
+            showSnackBar(message) {
+                document.querySelector('#demo-toast-example')
+                        .MaterialSnackbar
+                        .showSnackbar({
+                            message: message,
+                            timeout: 1500
+                        });
             }
         },
         created() {
