@@ -10,7 +10,7 @@
                     <input type="checkbox" @change="check(task.id, $event)" :checked="task.status"
                            :id="getCheckboxId(task.id)" class="mdl-checkbox__input"/>
                 </label>
-                <input type="text" class="mdl-list__input" @keyup="update(task.id, $event)" :value="task.name" maxlength="90"
+                <input type="text" class="mdl-list__input" @focusout="update(task.id, $event)" :value="task.name" maxlength="90"
                    :id="getInputId(task.id)" :disabled="task.status == 1"  :class="{through:task.status}">
                 </input>
             </span>
@@ -68,7 +68,7 @@
                 this.$http.patch('/task/' + id, {
                     name: task.name
                 }).then(response => {
-                    this.showSnackBar('Task updated!');
+                    this.showSnackBar('Task saved!');
                 }, response => {
                     this.showSnackBar('Error!');
                 });

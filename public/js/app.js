@@ -1692,7 +1692,7 @@ var Draggable = __webpack_require__("./node_modules/vuedraggable/dist/vuedraggab
             this.$http.patch('/task/' + id, {
                 name: task.name
             }).then(function (response) {
-                _this.showSnackBar('Task updated!');
+                _this.showSnackBar('Task saved!');
             }, function (response) {
                 _this.showSnackBar('Error!');
             });
@@ -33773,7 +33773,7 @@ var render = function() {
                 },
                 domProps: { value: task.name },
                 on: {
-                  keyup: function($event) {
+                  focusout: function($event) {
                     _vm.update(task.id, $event)
                   }
                 }
