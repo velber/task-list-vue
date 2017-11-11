@@ -1667,7 +1667,6 @@ var Draggable = __webpack_require__("./node_modules/vuedraggable/dist/vuedraggab
         move: function move(e) {
             var order = this.getOrder(e);
             var id = e.item.dataset.id;
-
             e.item.dataset.order = order;
 
             this.$http.patch('/task/' + id, {
@@ -1679,7 +1678,9 @@ var Draggable = __webpack_require__("./node_modules/vuedraggable/dist/vuedraggab
             this.$http.patch('/task/' + id, {
                 status: status
             }).then(function (response) {
-                //TODO cross annd move to down
+                var $input = e.target.closest('.mdl-list__item-primary-content').querySelector('.mdl-list__input');
+                $input.classList.toggle('through');
+                $input.disabled = e.target.checked;
             });
         },
 
@@ -1726,7 +1727,8 @@ var Draggable = __webpack_require__("./node_modules/vuedraggable/dist/vuedraggab
         getOrder: function getOrder(e) {
             var newOrder = void 0;
             var topOrder = _.isNull(e.item.previousSibling) ? null : _.toNumber(e.item.previousSibling.dataset.order);
-            var bottomOrder = _.isNull(e.item.nextSibling) ? null : _.toNumber(e.item.nextSibling.dataset.order);
+
+            var bottomOrder = e.item.nextSibling.nodeName === '#text' ? null : _.toNumber(e.item.nextSibling.dataset.order);
 
             if (_.isNull(topOrder)) {
                 newOrder = bottomOrder + 1;
@@ -4157,7 +4159,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.mdl-list {\n    padding: 0;\n}\n.mdl-list__item {\n    margin-bottom: 15px;\n    background-color: #fbfffc;\n    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);\n            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);\n}\n.mdl-checkbox {\n    width: 24px;\n}\n.handle {\n    margin-right: 15px;\n}\n.mdl-list__input {\n    outline: none;\n    border: none;\n    width: 100%;\n}\n.sortable-ghost {\n    background-color: #97b498;\n}\n.sortable-ghost input {\n    background-color: #97b498;\n}\n.sortable-drag {\n    background-color: #fbfffc;\n}\n.mdl-button--fab {\n    float: right;\n}\n", ""]);
+exports.push([module.i, "\n.mdl-list {\n    padding: 0;\n}\n.mdl-list__item {\n    padding: 5px;\n    margin-bottom: 15px;\n    background-color: #fbfffc;\n    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);\n            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);\n}\n.mdl-checkbox {\n    width: 24px;\n}\n.handle {\n    margin-right: 15px;\n}\n.mdl-list__input {\n    outline: none;\n    border: none;\n    width: 100%;\n}\n.through {\n    text-decoration: line-through;\n    color: #a9a5a5;\n    background: #fbfffc;\n}\n.sortable-ghost {\n    background-color: #97b498;\n}\n.sortable-ghost input {\n    background-color: #97b498;\n}\n.sortable-drag {\n    background-color: #fbfffc;\n}\n.mdl-button--fab {\n    float: right;\n}\n.mdl-list__item-secondary-action {\n    display: none;\n}\n.mdl-list__item-secondary-action i {\n    color: #97b498;\n}\n.mdl-list__item:hover .mdl-list__item-secondary-action {\n    display: block;\n}\n", ""]);
 
 // exports
 
@@ -33762,7 +33764,13 @@ var render = function() {
               _vm._v(" "),
               _c("input", {
                 staticClass: "mdl-list__input",
-                attrs: { type: "text", id: _vm.getInputId(task.id) },
+                class: { through: task.status },
+                attrs: {
+                  type: "text",
+                  maxlength: "90",
+                  id: _vm.getInputId(task.id),
+                  disabled: task.status == 1
+                },
                 domProps: { value: task.name },
                 on: {
                   keyup: function($event) {

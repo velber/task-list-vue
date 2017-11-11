@@ -11,12 +11,6 @@
         <link href="{{ asset('css/vendor.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css" />
-
-        <script>
-            window.Laravel = <?php echo json_encode([
-                    'csrfToken' => csrf_token(),
-            ]); ?>
-        </script>
     </head>
     <body>
         <div class="mdl-spinner mdl-js-spinner" style="display: none"></div>

@@ -10,8 +10,8 @@
                     <input type="checkbox" @change="check(task.id, $event)" :checked="task.status"
                            :id="getCheckboxId(task.id)" class="mdl-checkbox__input"/>
                 </label>
-                <input type="text" class="mdl-list__input" @keyup="update(task.id, $event)" :value="task.name"
-                   :id="getInputId(task.id)">
+                <input type="text" class="mdl-list__input" @keyup="update(task.id, $event)" :value="task.name" maxlength="90"
+                   :id="getInputId(task.id)" :disabled="task.status == 1"  :class="{through:task.status}">
                 </input>
             </span>
             <span class="mdl-list__item-secondary-action">
@@ -44,7 +44,6 @@
             move(e) {
                 let order = this.getOrder(e);
                 let id = e.item.dataset.id;
-
                 e.item.dataset.order = order;
 
                 this.$http.patch('/task/' + id, {
@@ -56,7 +55,11 @@
                 this.$http.patch('/task/' + id, {
                     status: status
                 }).then(response => {
-                    //TODO cross annd move to down
+                    let $input = e.target
+                            .closest('.mdl-list__item-primary-content')
+                            .querySelector('.mdl-list__input');
+                    $input.classList.toggle('through');
+                    $input.disabled = e.target.checked;
                 });
             },
             update: _.debounce(function(id, e) {
@@ -98,7 +101,8 @@
                 let topOrder = _.isNull(e.item.previousSibling)
                         ? null
                         : _.toNumber(e.item.previousSibling.dataset.order);
-                let bottomOrder = _.isNull(e.item.nextSibling)
+
+                let bottomOrder = e.item.nextSibling.nodeName === '#text'
                         ? null
                         : _.toNumber(e.item.nextSibling.dataset.order);
 
@@ -141,6 +145,7 @@
         padding: 0;
     }
     .mdl-list__item {
+        padding: 5px;
         margin-bottom: 15px;
         background-color: #fbfffc;
         box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
@@ -156,6 +161,11 @@
         border: none;
         width: 100%;
     }
+    .through {
+        text-decoration: line-through;
+        color: #a9a5a5;
+        background: #fbfffc;
+    }
     .sortable-ghost {
         background-color: #97b498;
     }
@@ -167,5 +177,14 @@
     }
     .mdl-button--fab {
         float: right;
+    }
+    .mdl-list__item-secondary-action {
+        display: none;
+    }
+    .mdl-list__item-secondary-action i {
+        color: #97b498;
+    }
+    .mdl-list__item:hover .mdl-list__item-secondary-action {
+        display: block;
     }
 </style>

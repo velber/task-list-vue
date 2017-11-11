@@ -7720,3 +7720,7 @@ button.close {
     display: none !important;
   }
 }
+
+.container {
+  padding: 0 200px;
+}
