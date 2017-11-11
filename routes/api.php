@@ -17,3 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 */
+Route::namespace('Api')->group(function () {
+    Route::get('/tasks', 'TaskController@tasks');
+    Route::post('/task', 'TaskController@store');
+    Route::patch('/task/{task}', 'TaskController@update')->where('task', '[\d+]+');
+    Route::delete('/task/{task}', 'TaskController@destroy')->where('task', '[\d+]+');
+});
