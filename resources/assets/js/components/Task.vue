@@ -6,10 +6,8 @@
                 <button class="mdl-button mdl-js-button mdl-button--icon handle">
                     <i class="material-icons">blur_on</i>
                 </button>
-                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" :for="getCheckboxId(task.id)">
-                    <input type="checkbox" @change="check(task.id, $event)" :checked="task.status"
-                           :id="getCheckboxId(task.id)" class="mdl-checkbox__input"/>
-                </label>
+                <input type="checkbox" @change="check(task.id, $event)" :checked="task.status"
+                                :id="getCheckboxId(task.id)" class="mdl-checkbox__input"/>
                 <input type="text" class="mdl-list__input" @focusout="update(task.id, $event)" :value="task.name" maxlength="90"
                    :id="getInputId(task.id)" :disabled="task.status == 1"  :class="{through:task.status}">
                 </input>
@@ -145,16 +143,16 @@
         padding: 0;
     }
     .mdl-list__item {
-        padding: 5px;
+        padding: 0;
         margin-bottom: 15px;
-        background-color: #fbfffc;
+        background-color: #fff;
         box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
     }
     .mdl-checkbox {
         width: 24px;
     }
     .handle {
-        margin-right: 15px;
+        margin-right: 10px;
     }
     .mdl-list__input {
         outline: none;
@@ -164,7 +162,7 @@
     .through {
         text-decoration: line-through;
         color: #a9a5a5;
-        background: #fbfffc;
+        background: #fff;
     }
     .sortable-ghost {
         background-color: #97b498;
@@ -174,6 +172,9 @@
     }
     .sortable-drag {
         background-color: #fbfffc;
+    }
+    .mdl-list__item-primary-content .mdl-checkbox__input {
+        margin: 0 15px 0 0;
     }
     .mdl-button--fab {
         float: right;

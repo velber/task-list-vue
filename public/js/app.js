@@ -1647,8 +1647,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 var Draggable = __webpack_require__("./node_modules/vuedraggable/dist/vuedraggable.js");
 
@@ -4159,7 +4157,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.mdl-list {\n    padding: 0;\n}\n.mdl-list__item {\n    padding: 5px;\n    margin-bottom: 15px;\n    background-color: #fbfffc;\n    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);\n            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);\n}\n.mdl-checkbox {\n    width: 24px;\n}\n.handle {\n    margin-right: 15px;\n}\n.mdl-list__input {\n    outline: none;\n    border: none;\n    width: 100%;\n}\n.through {\n    text-decoration: line-through;\n    color: #a9a5a5;\n    background: #fbfffc;\n}\n.sortable-ghost {\n    background-color: #97b498;\n}\n.sortable-ghost input {\n    background-color: #97b498;\n}\n.sortable-drag {\n    background-color: #fbfffc;\n}\n.mdl-button--fab {\n    float: right;\n}\n.mdl-list__item-secondary-action {\n    display: none;\n}\n.mdl-list__item-secondary-action i {\n    color: #97b498;\n}\n.mdl-list__item:hover .mdl-list__item-secondary-action {\n    display: block;\n}\n", ""]);
+exports.push([module.i, "\n.mdl-list {\n    padding: 0;\n}\n.mdl-list__item {\n    padding: 0;\n    margin-bottom: 15px;\n    background-color: #fff;\n    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);\n            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);\n}\n.mdl-checkbox {\n    width: 24px;\n}\n.handle {\n    margin-right: 10px;\n}\n.mdl-list__input {\n    outline: none;\n    border: none;\n    width: 100%;\n}\n.through {\n    text-decoration: line-through;\n    color: #a9a5a5;\n    background: #fff;\n}\n.sortable-ghost {\n    background-color: #97b498;\n}\n.sortable-ghost input {\n    background-color: #97b498;\n}\n.sortable-drag {\n    background-color: #fbfffc;\n}\n.mdl-list__item-primary-content .mdl-checkbox__input {\n    margin: 0 15px 0 0;\n}\n.mdl-button--fab {\n    float: right;\n}\n.mdl-list__item-secondary-action {\n    display: none;\n}\n.mdl-list__item-secondary-action i {\n    color: #97b498;\n}\n.mdl-list__item:hover .mdl-list__item-secondary-action {\n    display: block;\n}\n", ""]);
 
 // exports
 
@@ -33741,26 +33739,16 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
-              _c(
-                "label",
-                {
-                  staticClass:
-                    "mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect",
-                  attrs: { for: _vm.getCheckboxId(task.id) }
-                },
-                [
-                  _c("input", {
-                    staticClass: "mdl-checkbox__input",
-                    attrs: { type: "checkbox", id: _vm.getCheckboxId(task.id) },
-                    domProps: { checked: task.status },
-                    on: {
-                      change: function($event) {
-                        _vm.check(task.id, $event)
-                      }
-                    }
-                  })
-                ]
-              ),
+              _c("input", {
+                staticClass: "mdl-checkbox__input",
+                attrs: { type: "checkbox", id: _vm.getCheckboxId(task.id) },
+                domProps: { checked: task.status },
+                on: {
+                  change: function($event) {
+                    _vm.check(task.id, $event)
+                  }
+                }
+              }),
               _vm._v(" "),
               _c("input", {
                 staticClass: "mdl-list__input",
