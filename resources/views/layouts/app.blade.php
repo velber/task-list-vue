@@ -8,9 +8,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Main CSS file -->
-        <link href="{{ asset('css/vendor.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" />
-        <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <div class="mdl-spinner mdl-js-spinner" style="display: none"></div>
@@ -24,8 +22,7 @@
         </div>
 
         <!-- custom scripts -->
-        <script src="{{ mix('/js/vendor.js') }}" type="text/javascript"></script>
-        <script src="{{ mix('/js/app.js') }}" type="text/javascript"></script>
+        <script src="{{ mix('/js/script.js') }}" type="text/javascript"></script>
 
     </body>
 </html>

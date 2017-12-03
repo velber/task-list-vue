@@ -1,16 +1,25 @@
 <template>
-    <draggable v-model="tasks" :taskd="tasks" :options="{handle:'.handle'}" class="mdl-list"
-               @start="drag=true" @end="drag=false" @update="move">
-        <div class="mdl-list__item" v-for="(task, index) in tasks" :key="task.id" :data-order="task.order" :data-id="task.id">
+    <draggable class="mdl-list"
+               v-model="tasks"
+               :taskd="tasks"
+               :options="{handle:'.handle'}"
+               @update="move">
+        <div class="mdl-list__item" v-for="(task, index) in tasks"
+             :key="task.id"
+             :data-order="task.order"
+             :data-id="task.id">
             <span class="mdl-list__item-primary-content">
                 <button class="mdl-button mdl-js-button mdl-button--icon handle">
                     <i class="material-icons">blur_on</i>
                 </button>
-                <input type="checkbox" @change="check(task.id, $event)" :checked="task.status"
-                                :id="getCheckboxId(task.id)" class="mdl-checkbox__input"/>
-                <input type="text" class="mdl-list__input" @focusout="update(task.id, $event)" :value="task.name" maxlength="90"
-                   :id="getInputId(task.id)" :disabled="task.status == 1"  :class="{through:task.status}">
-                </input>
+                <div class="toggle" :class="{checked: task.status}" @click="toggle(task, $event)"></div>
+                <input type="text" class="mdl-list__input"
+                       :value="task.name" maxlength="60"
+                       :id="getInputId(task.id)"
+                       :disabled="task.status == 1"
+                       :class="{through:task.status}"
+                       @focusout="update(task.id, $event)"
+                       @keyup.enter="update(task.id, $event)"/>
             </span>
             <span class="mdl-list__item-secondary-action">
                 <button class="mdl-button mdl-js-button mdl-button--icon" @click="remove(index, task.id)">
@@ -18,16 +27,15 @@
                 </button>
             </span>
         </div>
-        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored"
-                slot="footer" @click="addTask">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" slot="footer"
+                @click="addTask">
             <i class="material-icons">add</i>
         </button>
     </draggable>
 </template>
 
 <script>
-    var Draggable = require('vuedraggable');
-
+    import draggable from 'vuedraggable';
     export default {
         data() {
             return {
@@ -36,7 +44,7 @@
             }
         },
         components: {
-            draggable: Draggable
+            draggable: draggable
         },
         methods: {
             move(e) {
@@ -48,16 +56,14 @@
                     order: order
                 });
             },
-            check(id, e) {
-                let status = e.target.checked;
-                this.$http.patch('/task/' + id, {
-                    status: status
-                }).then(response => {
-                    let $input = e.target
-                            .closest('.mdl-list__item-primary-content')
-                            .querySelector('.mdl-list__input');
-                    $input.classList.toggle('through');
-                    $input.disabled = e.target.checked;
+            toggle(task, e) {
+                task.status = ! task.status;
+                e.target.closest('.mdl-list__item-primary-content')
+                    .querySelector('.mdl-list__input')
+                    .disabled = task.status;
+
+                this.$http.patch('/task/' + task.id, {
+                    status: task.status
                 });
             },
             update: _.debounce(function(id, e) {
@@ -148,21 +154,33 @@
         background-color: #fff;
         box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
     }
-    .mdl-checkbox {
-        width: 24px;
-    }
     .handle {
-        margin-right: 10px;
+        margin-left: 5px;
+    }
+    .toggle {
+        cursor: pointer;
+        margin-right: 5px;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+    .toggle:after {
+        content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#ededed" stroke-width="3"/></svg>');
+    }
+    .toggle.checked:after {
+        content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#bddad5" stroke-width="3"/><path fill="#5dc2af" d="M72 25L42 71 27 56l-4 4 20 20 34-52z"/></svg>');
     }
     .mdl-list__input {
+        font-size: 22px;
         outline: none;
         border: none;
         width: 100%;
+        transition: color 0.4s, font-size 0.2s;
     }
     .through {
         text-decoration: line-through;
         color: #a9a5a5;
         background: #fff;
+        font-size: 18px;
     }
     .sortable-ghost {
         background-color: #97b498;
@@ -172,9 +190,6 @@
     }
     .sortable-drag {
         background-color: #fbfffc;
-    }
-    .mdl-list__item-primary-content .mdl-checkbox__input {
-        margin: 0 15px 0 0;
     }
     .mdl-button--fab {
         float: right;

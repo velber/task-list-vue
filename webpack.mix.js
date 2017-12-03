@@ -11,16 +11,19 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.scripts([
+mix
+    .js('resources/assets/js/app.js', 'public/js')
+    .scripts([
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/bootstrap-sass/assets/javascripts/bootstrap.min.js',
-    'node_modules/material-design-lite/dist/material.min.js'
-], 'public/js/vendor.js')
-    .js('resources/assets/js/app.js', 'public/js')
-    .styles([
-        'node_modules/material-design-lite/dist/material.green-red.min.css'
-    ], 'public/css/vendor.css')
+    'node_modules/material-design-lite/dist/material.min.js',
+    'public/js/app.js'
+], 'public/js/script.js')
     .sass('resources/assets/sass/app.scss', 'public/css')
+    .styles([
+        'public/css/app.css',
+        'node_modules/material-design-lite/dist/material.green-red.min.css'
+    ], 'public/css/style.css')
     .browserSync('jobcrowd.dev')
     .version()
     .options({
